@@ -1,0 +1,29 @@
+html {
+  --text-primary: red;
+  --background-color: white;
+}
+
+@media (max-width: 200px) {
+  body {
+    background-color: red !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --text-primary: blue;
+  }
+}
+
+html.dark-mode {
+  --text-primary: blue;
+  --background-color: black;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+h1 {
+  color: var(--text-primary);
+}
