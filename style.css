@@ -28,11 +28,10 @@ h1 {
   color: var(--text-primary);
 }
 
-
 /* || general styles */
 
 html {
-  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+  font-family: "helvetica neue", helvetica, arial, sans-serif;
 }
 
 body {
@@ -40,8 +39,9 @@ body {
   margin: 0 auto;
 }
 
-h1, h2 {
-  font-family: 'Faster One', cursive;
+h1,
+h2 {
+  font-family: "Faster One", cursive;
 }
 
 /* header styles */

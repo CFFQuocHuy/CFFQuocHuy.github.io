@@ -172,8 +172,8 @@ function populateHeader(obj) {
 const fetchApi = async () => {
   console.log("FETCH");
   const response = await fetch(requestURL, { method: "GET" });
-  const json = await response.json()
-  console.log(json, "???12301928")
+  const json = await response.json();
+  console.log(json, "???12301928");
 };
 
 fetchApi();
