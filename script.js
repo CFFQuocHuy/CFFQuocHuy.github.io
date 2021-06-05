@@ -3,7 +3,7 @@
 // Link list => danh sách liên kết
 
 // TREE
-console.log("Xin chào");
+console.log("Xin chào", "Xin Chào");
 
 var htmlTag = document.querySelector("html");
 
