@@ -1,16 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { stringify } from 'qs';
-import { toast } from 'react-toastify';
-import forIn from 'lodash/forIn';
-import React from 'react';
-import Cookie from 'js-cookie';
-import { get, STORAGE } from '../utils/storage';
-import ErrorMessage from '../../components/Form/ErrorMessage';
-import { isFunc } from '../../utils/util';
+// import { stringify } from "qs";
+// import { toast } from "react-toastify";
+// import forIn from "lodash/forIn";
+// import React from "react";
+// import Cookie from "js-cookie";
+// import { get, STORAGE } from "../utils/storage";
+// import ErrorMessage from "../../components/Form/ErrorMessage";
+// import { isFunc } from "../../utils/util";
 
 const SYSTEM_ERROR = 1;
 const API_ERROR = 2;
-export const UNAUTHORIZE_ERROR = 'UNAUTHORIZED';
+export const UNAUTHORIZE_ERROR = "UNAUTHORIZED";
 
 class ApiError extends Error {
   constructor(message, error, type) {
@@ -39,32 +39,32 @@ async function validateResponse(response) {
         break;
       case 401:
         error = {
-          name: 'path',
+          name: "path",
           code: UNAUTHORIZE_ERROR,
           message: UNAUTHORIZE_ERROR,
         };
         break;
       case 403:
         error = {
-          name: 'path',
-          code: 'ACCESS_DENIED',
-          message: 'FUNCTION_HAS_BLOCKED',
+          name: "path",
+          code: "ACCESS_DENIED",
+          message: "FUNCTION_HAS_BLOCKED",
         };
-        return toast.error('機能がブロックされました。');
+      // return toast.error("機能がブロックされました。");
       case 404:
         error = await response.json();
         break;
       default:
         type = 1;
         error = {
-          name: 'path',
-          code: 'INTERNAL_ERROR',
+          name: "path",
+          code: "INTERNAL_ERROR",
           message: response.statusText,
         };
-        return toast.error(<ErrorMessage error={error} />, {
-          toastId: error.code,
-          position: toast.POSITION.TOP_RIGHT,
-        });
+      // return toast.error(<ErrorMessage error={error} />, {
+      //   toastId: error.code,
+      //   position: toast.POSITION.TOP_RIGHT,
+      // });
     }
 
     if (error) {
@@ -81,14 +81,20 @@ function readResponseAsJSON(response) {
 }
 
 function getAuthHeader() {
-  const token =
-    get(STORAGE.JWT) && get(STORAGE.JWT) !== 'null'
-      ? get(STORAGE.JWT)
-      : Cookie.get(STORAGE.JWT);
+  // const token =
+  //   get(STORAGE.JWT) && get(STORAGE.JWT) !== "null"
+  //     ? get(STORAGE.JWT)
+  //     : Cookie.get(STORAGE.JWT);
+
+  // key JWT, authenticate, authorize, oauth...
+
   return {
-    Authorization: `Bearer ${encodeURIComponent(token)}`,
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    // OAUTH need key / token
+    // Authorization: `Bearer ${encodeURIComponent(token)}`,
+
+    // JSON, BLOB ...
+    "Content-Type": "application/json",
+    Accept: "application/json",
   };
 }
 
@@ -97,15 +103,20 @@ export function fetchWithAuth(pathToResource) {
 }
 
 export function fetchJSON(pathToResource) {
+  // HTTP: GET, POST, PUT, DELETE, PATCH
+  // GET REQUEST
+  // ERORR code
+  // AXIOS is library not Built in funciton like fetch
   return fetch(pathToResource, { headers: getAuthHeader() })
     .then(validateResponse)
     .then(readResponseAsJSON)
     .catch(logError);
 }
 
+// REST, RESTful, postman, cURL, ...
 export function postJSON(pathToResource, body) {
   return fetch(pathToResource, {
-    method: 'POST',
+    method: "POST",
     headers: getAuthHeader(),
     body: JSON.stringify(body),
   })
@@ -116,7 +127,7 @@ export function postJSON(pathToResource, body) {
 
 export function putJSON(pathToResource, body) {
   return fetch(pathToResource, {
-    method: 'PUT',
+    method: "PUT",
     headers: getAuthHeader(),
     body: JSON.stringify(body),
   })
@@ -127,7 +138,7 @@ export function putJSON(pathToResource, body) {
 
 export function deleteRequest(pathToResource) {
   return fetch(pathToResource, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: getAuthHeader(),
   })
     .then(validateResponse)
@@ -135,54 +146,54 @@ export function deleteRequest(pathToResource) {
     .catch(logError);
 }
 
-export function createSearchApi(url, extQuery) {
-  /**
-   * Search query include page,size,filter
-   * @param params: {
-   *   page: number,
-   *   size: number,
-   *   sorts: [],
-   *   filter:{
-   *     search: '',
-   *     id: number,
-   *     ...
-   *   }
-   * }
-   */
-  return params => {
-    const { page, size, sorts, filter } = params;
-    const mapSorts = [];
-    forIn(sorts, function mapItem(val, key) {
-      if (val && val.length && key && key.length) {
-        mapSorts.push([`${key}:${val}`]);
-      }
-    });
-    const body = {
-      page,
-      size,
-      sorts: mapSorts,
-      ...filter,
-    };
+// export function createSearchApi(url, extQuery) {
+//   /**
+//    * Search query include page,size,filter
+//    * @param params: {
+//    *   page: number,
+//    *   size: number,
+//    *   sorts: [],
+//    *   filter:{
+//    *     search: '',
+//    *     id: number,
+//    *     ...
+//    *   }
+//    * }
+//    */
+//   return (params) => {
+//     const { page, size, sorts, filter } = params;
+//     const mapSorts = [];
+//     forIn(sorts, function mapItem(val, key) {
+//       if (val && val.length && key && key.length) {
+//         mapSorts.push([`${key}:${val}`]);
+//       }
+//     });
+//     const body = {
+//       page,
+//       size,
+//       sorts: mapSorts,
+//       ...filter,
+//     };
 
-    let endpoint = `${isFunc(url) ? url() : url}?${stringify(body, {
-      arrayFormat: 'repeat',
-    })}`;
+//     let endpoint = `${isFunc(url) ? url() : url}?${stringify(body, {
+//       arrayFormat: "repeat",
+//     })}`;
 
-    if (extQuery) {
-      endpoint = `${endpoint}&${extQuery}`;
-    }
-    return fetchJSON(endpoint);
-  };
-}
+//     if (extQuery) {
+//       endpoint = `${endpoint}&${extQuery}`;
+//     }
+//     return fetchJSON(endpoint);
+//   };
+// }
 
 export function createCRUDApi(url) {
-  const create = form => postJSON(`${url}`, form);
-  const search = createSearchApi(url);
-  const read = id => fetchJSON(`${url}/${id}`);
+  const create = (form) => postJSON(`${url}`, form);
+  // const search = createSearchApi(url);
+  const read = (id) => fetchJSON(`${url}/${id}`);
   const update = (id, form) => putJSON(`${url}/${id}`, form);
-  const remove = id => deleteRequest(`${url}/${id}`);
+  const remove = (id) => deleteRequest(`${url}/${id}`);
   return {
-    search,
+    // search,
     create,
     read,
     update,
@@ -192,10 +203,10 @@ export function createCRUDApi(url) {
 
 export const download = (url, name) =>
   fetchWithAuth(url)
-    .then(response => response.blob())
-    .then(blobby => {
+    .then((response) => response.blob())
+    .then((blobby) => {
       const objectUrl = window.URL.createObjectURL(blobby);
-      const anchor = document.createElement('a');
+      const anchor = document.createElement("a");
       anchor.href = objectUrl;
       anchor.download = name;
       anchor.click();
