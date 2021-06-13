@@ -17,10 +17,6 @@ function Counter() {
 
   const increaseCount = () => setCount((preState) => preState + 1);
 
-  function autoIncrease() {
-    setCount(count + 1);
-  }
-
   //(3) DID mount, END LIFECYLE i (firstMount)
   //(2) DID update (secondMount)
   useEffect(() => {
